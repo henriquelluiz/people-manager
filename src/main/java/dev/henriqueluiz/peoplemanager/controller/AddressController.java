@@ -17,35 +17,72 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequiredArgsConstructor
 public class AddressController {
     private final AddService addressService;
 
     @PostMapping(value = { "/addresses/save" }, produces = { "application/hal+json" })
-    public ResponseEntity<Address> savePerson(@RequestParam Long personId, @RequestBody @Valid Address req) {
+    public ResponseEntity<Address> saveAddress(@RequestParam Long personId, @RequestBody @Valid Address req) {
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .port(8080)
                         .path("/addresses/save")
                         .toUriString());
-        return ResponseEntity.created(uri).body(addressService.saveAddress(personId, req));
+
+        Address response = addressService.saveAddress(personId, req);
+        response.add(
+                linkTo(methodOn(AddressController.class)
+                        .setPreferential(personId, req.getAddressId()))
+                        .withSelfRel()
+        );
+        response.add(
+                linkTo(methodOn(AddressController.class)
+                        .getAll(personId, Pageable.ofSize(3)))
+                        .withSelfRel()
+        );
+        return ResponseEntity.created(uri).body(response);
     }
 
     @GetMapping(value = { "/addresses/get" }, produces = { "application/hal+json" })
     public ResponseEntity<Address> getAddressById(@RequestParam Long personId, @RequestParam Long addressId) {
-        return ResponseEntity.ok(addressService.getAddressById(personId, addressId));
+        Address response = addressService.getAddressById(personId, addressId);
+        response.add(
+                linkTo(methodOn(AddressController.class)
+                        .getPreferential(personId))
+                        .withSelfRel()
+        );
+        response.add(
+                linkTo(methodOn(AddressController.class)
+                        .getAll(personId, Pageable.ofSize(3)))
+                        .withSelfRel()
+        );
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(value = { "/addresses/get/preferential" }, produces = { "application/hal+json" })
-    public ResponseEntity<Address> getPreferential(@RequestParam("person_id") Long personId) {
-        return ResponseEntity.ok(addressService.getPreferentialAddress(personId));
+    public ResponseEntity<Address> getPreferential(@RequestParam Long personId) {
+        Address response = addressService.getPreferentialAddress(personId);
+        response.add(
+                linkTo(methodOn(AddressController.class)
+                        .setPreferential(personId, null))
+                        .withSelfRel()
+        );
+        response.add(
+                linkTo(methodOn(AddressController.class)
+                        .getAll(personId, Pageable.ofSize(3)))
+                        .withSelfRel()
+        );
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping(value = { "/addresses/edit/preferential" }, produces = { "application/json" })
-    public ResponseEntity<Void> setPreferential(@RequestParam Long personId, @RequestParam Long addressId, Boolean value) {
-        addressService.setPreferentialAddress(personId, addressId, value);
+    public ResponseEntity<Void> setPreferential(@RequestParam Long personId, @RequestParam Long addressId) {
+        addressService.setPreferentialAddress(personId, addressId);
         return ResponseEntity.noContent().build();
     }
 

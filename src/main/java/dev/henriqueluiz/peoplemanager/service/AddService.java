@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 public interface AddService {
     Address saveAddress(Long personId, Address entity);
     Address getAddressById(Long personId, Long addressId);
-    void setPreferentialAddress(Long personId, Long addressId, Boolean value);
+    void setPreferentialAddress(Long personId, Long addressId);
     Address getPreferentialAddress(Long personId);
     Page<Address> getAll(Long personId, Pageable pageable);
 }

@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @Transactional
@@ -54,20 +56,16 @@ public class AddServiceImpl implements AddService {
     }
 
     @Override
-    public void setPreferentialAddress(Long personId, Long addressId, Boolean value) {
+    public void setPreferentialAddress(Long personId, Long addressId) {
         log.debug("");
-        boolean hasPreferential = addressRepository.findByPreferred(personId).isPresent();
-        if(hasPreferential) {
-            log.debug("");
-            throw new IllegalStateException();
-        }
-
+        Optional<Address> preferred = addressRepository.findByPreferred(personId);
+        preferred.ifPresent(address -> address.setPreferred(false));
         Address address = addressRepository.findByPersonId(personId, addressId)
                 .orElseThrow(() -> {
                     log.debug("");
                     return new EntityNotFoundException();
                 });
-        address.setPreferred(value);
+        if (!address.getPreferred()) { address.setPreferred(true); }
         log.debug("");
     }
 
