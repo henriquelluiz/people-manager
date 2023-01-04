@@ -9,6 +9,6 @@ import dev.henriqueluiz.peoplemanager.web.response.TokenResponse;
 import org.springframework.security.core.Authentication;
 
 public interface TokenService {
-    TokenResponse accessToken(Authentication authentication);
-    TokenResponse refreshToken(String token);
+    TokenResponse getTokens(Authentication authentication);
+    TokenResponse refreshTokens(String token);
 }

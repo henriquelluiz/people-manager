@@ -20,6 +20,6 @@ public class TokenResponse {
     @JsonProperty("access_token")
     private Map<String, Object> accessToken;
 
-    @JsonProperty("access_token")
+    @JsonProperty("refresh_token")
     private Map<String, Object> refreshToken;
 }

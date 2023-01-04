@@ -5,7 +5,7 @@ package dev.henriqueluiz.peoplemanager.service;
  * @Github: heenluy
  */
 
-import dev.henriqueluiz.peoplemanager.model.User;
+import dev.henriqueluiz.peoplemanager.model.AppUser;
 import dev.henriqueluiz.peoplemanager.repository.UserRepository;
 import dev.henriqueluiz.peoplemanager.web.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class TokenServiceImpl implements TokenService {
     private final UserRepository userRepository;
 
     @Override
-    public TokenResponse accessToken(Authentication authentication) {
+    public TokenResponse getTokens(Authentication authentication) {
         log.debug("");
         Instant now = Instant.now();
         List<String> scope = authentication.getAuthorities()
@@ -50,9 +50,9 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public TokenResponse refreshToken(String token) {
+    public TokenResponse refreshTokens(String token) {
         log.debug("");
-        User user = getUserBySubject(token);
+        AppUser user = getUserBySubject(token);
         Instant now = Instant.now();
         List<String> scope = user.getAuthorities().stream().toList();
         String accessToken = getEncodedToken(user.getEmail(), scope, 25L, MINUTES);
@@ -80,7 +80,7 @@ public class TokenServiceImpl implements TokenService {
                 .getTokenValue();
     }
 
-    private User getUserBySubject(String token) {
+    private AppUser getUserBySubject(String token) {
         Jwt jwt = this.jwtDecoder.decode(token);
         String email = Objects.requireNonNull(jwt.getSubject());
         Instant expiresAt = Objects.requireNonNull(jwt.getExpiresAt());

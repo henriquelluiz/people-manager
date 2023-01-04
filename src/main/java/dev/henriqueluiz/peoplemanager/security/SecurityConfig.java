@@ -30,6 +30,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -53,6 +54,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(s -> s.sessionCreationPolicy(STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(GET, "/").permitAll()
+                        .requestMatchers("/users/save", "/roles/get/all", "/roles/add").permitAll()
+                        .requestMatchers("/token", "/refresh", "/actuator/**").permitAll()
+                        .requestMatchers("/roles/save", "/users/delete", "/users/get").hasAnyAuthority("SCOPE_manager", "SCOPE_admin")
+                        .anyRequest().authenticated()
+                )
                 .build();
     }
 
