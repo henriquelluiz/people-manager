@@ -5,7 +5,7 @@ package dev.henriqueluiz.peoplemanager.model.detail;
  * @Github: heenluy
  */
 
-import dev.henriqueluiz.peoplemanager.model.User;
+import dev.henriqueluiz.peoplemanager.model.AppUser;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class JPAUserDetails implements UserDetails {
-    private final User user;
+    private final AppUser user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
