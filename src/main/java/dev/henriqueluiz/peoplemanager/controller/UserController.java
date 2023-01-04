@@ -5,8 +5,8 @@ package dev.henriqueluiz.peoplemanager.controller;
  * @Github: heenluy
  */
 
-import dev.henriqueluiz.peoplemanager.model.Role;
 import dev.henriqueluiz.peoplemanager.model.AppUser;
+import dev.henriqueluiz.peoplemanager.model.Role;
 import dev.henriqueluiz.peoplemanager.service.UserService;
 import dev.henriqueluiz.peoplemanager.web.request.RoleRequest;
 import dev.henriqueluiz.peoplemanager.web.request.RoleUserRequest;
@@ -26,6 +26,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -41,6 +44,11 @@ public class UserController {
                         .path("/users/save")
                         .toUriString());
         UserResponse response = entityToResponse(user);
+        response.add(
+                linkTo(methodOn(UserController.class)
+                        .getAllRoles(Pageable.ofSize(3)))
+                        .withSelfRel()
+        );
         return ResponseEntity.created(uri).body(response);
     }
 
@@ -52,8 +60,22 @@ public class UserController {
                         .port(8080)
                         .path("/roles/save")
                         .toUriString());
+        // Saving new role
         userService.saveRole(new Role(null, req.roleName()));
-        return ResponseEntity.created(uri).body(new RoleResponse(req.roleName()));
+
+        // HATEOAS
+        RoleResponse response = new RoleResponse(req.roleName());
+        response.add(
+                linkTo(methodOn(UserController.class)
+                        .addRolesToUser(new RoleUserRequest("roleName", "userEmail")))
+                        .withSelfRel()
+        );
+        response.add(
+                linkTo(methodOn(UserController.class)
+                        .getAllRoles(Pageable.ofSize(3)))
+                        .withSelfRel()
+        );
+        return ResponseEntity.created(uri).body(response);
     }
 
     @GetMapping(value = { "/roles/get/all" }, produces = { "application/hal+json" })
@@ -67,6 +89,16 @@ public class UserController {
     @GetMapping(value = { "/users/get" }, produces = { "application/hal+json" })
     public ResponseEntity<UserResponse> getUserByEmail(@RequestParam String email) {
         UserResponse response = entityToResponse(userService.getUser(email));
+        response.add(
+                linkTo(methodOn(UserController.class)
+                        .addRolesToUser(new RoleUserRequest("roleName", "userEmail")))
+                        .withSelfRel()
+        );
+        response.add(
+                linkTo(methodOn(UserController.class)
+                        .deleteUserByEmail(email))
+                        .withSelfRel()
+        );
         return ResponseEntity.ok(response);
     }
 
@@ -80,6 +112,11 @@ public class UserController {
     public ResponseEntity<AbstractResponse> addRolesToUser(@RequestBody @Valid RoleUserRequest req) {
         var model = new AbstractResponse();
         userService.addRolesToUser(req.roleName(), req.userEmail());
+        model.add(
+                linkTo(methodOn(AuthenticationController.class)
+                        .generateTokens(new UserRequest("example@mail.com", "example")))
+                        .withRel("generateTokens")
+        );
         return ResponseEntity.ok(model);
     }
 
