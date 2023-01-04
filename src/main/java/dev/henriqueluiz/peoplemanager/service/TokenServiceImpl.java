@@ -5,6 +5,7 @@ package dev.henriqueluiz.peoplemanager.service;
  * @Github: heenluy
  */
 
+import dev.henriqueluiz.peoplemanager.exception.model.InvalidTokenException;
 import dev.henriqueluiz.peoplemanager.model.AppUser;
 import dev.henriqueluiz.peoplemanager.repository.UserRepository;
 import dev.henriqueluiz.peoplemanager.web.response.TokenResponse;
@@ -33,7 +34,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public TokenResponse getTokens(Authentication authentication) {
-        log.debug("");
+        log.debug("Generating token for user: '{}'", authentication.getName());
         Instant now = Instant.now();
         List<String> scope = authentication.getAuthorities()
                 .stream()
@@ -51,8 +52,9 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public TokenResponse refreshTokens(String token) {
-        log.debug("");
         AppUser user = getUserBySubject(token);
+        log.debug("Refreshing token for user: '{}'", user.getEmail());
+
         Instant now = Instant.now();
         List<String> scope = user.getAuthorities().stream().toList();
         String accessToken = getEncodedToken(user.getEmail(), scope, 25L, MINUTES);
@@ -86,7 +88,7 @@ public class TokenServiceImpl implements TokenService {
         Instant expiresAt = Objects.requireNonNull(jwt.getExpiresAt());
 
         if((expiresAt.isBefore(Instant.now()))) {
-            throw new IllegalStateException("Token is not valid");
+            throw new InvalidTokenException("Token is not valid");
         }
 
         return userRepository.findByEmail(email).orElseThrow(() -> {

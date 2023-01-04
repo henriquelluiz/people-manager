@@ -29,17 +29,16 @@ public class AddServiceImpl implements AddService {
 
     @Override
     public Address saveAddress(Long personId, Address entity) {
-        log.debug("");
+        log.debug("Saving new address for person with id: '{}'", personId);
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> {
-                    log.debug("");
-                    return new EntityNotFoundException();
+                    log.debug("Entity not found");
+                    return new EntityNotFoundException("Entity not found");
                 });
 
-        boolean hasPreferential = addressRepository.findByPreferred(personId).isPresent();
-        if(hasPreferential && entity.getPreferred().equals(true)) {
-            log.debug("");
-            throw new IllegalStateException();
+        if(entity.getPreferred().equals(true)) {
+            Optional<Address> preferred = addressRepository.findByPreferred(personId);
+            preferred.ifPresent(address -> address.setPreferred(false));
         }
         entity.getPersons().add(person);
         return addressRepository.save(entity);
@@ -47,41 +46,41 @@ public class AddServiceImpl implements AddService {
 
     @Override
     public Address getAddressById(Long personId, Long addressId) {
-        log.debug("");
+        log.debug("Fetching address with id: '{}'", addressId);
         return addressRepository.findByPersonId(personId, addressId)
                 .orElseThrow(() -> {
-                    log.debug("");
-                    return new EntityNotFoundException();
+                    log.debug("Entity not found");
+                    return new EntityNotFoundException("Entity not found");
                 });
     }
 
     @Override
     public void setPreferentialAddress(Long personId, Long addressId) {
-        log.debug("");
+        log.debug("Setting preferred address for person with id: '{}'", personId);
         Optional<Address> preferred = addressRepository.findByPreferred(personId);
         preferred.ifPresent(address -> address.setPreferred(false));
         Address address = addressRepository.findByPersonId(personId, addressId)
                 .orElseThrow(() -> {
-                    log.debug("");
-                    return new EntityNotFoundException();
+                    log.debug("Entity not found");
+                    return new EntityNotFoundException("Entity not found");
                 });
         if (!address.getPreferred()) { address.setPreferred(true); }
-        log.debug("");
+        log.debug("Preferred address set successfully");
     }
 
     @Override
     public Address getPreferentialAddress(Long personId) {
-        log.debug("");
+        log.debug("Fetching preferred address for person with id: '{}'", personId);
         return addressRepository.findByPreferred(personId)
                 .orElseThrow(() -> {
-                    log.debug("");
-                    return new EntityNotFoundException();
+                    log.debug("Entity not found");
+                    return new EntityNotFoundException("Entity not found");
                 });
     }
 
     @Override
     public Page<Address> getAll(Long personId, Pageable pageable) {
-        log.debug("");
+        log.debug("Fetching all addresses for person with id: '{}'", personId);
         return addressRepository.findAllByPersonId(personId, pageable);
     }
 }

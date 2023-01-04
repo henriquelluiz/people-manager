@@ -24,49 +24,49 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person savePerson(Person entity) {
-        log.debug("");
+        log.debug("Saving a new person");
         return personRepository.save(entity);
     }
 
     @Override
     public void updatePerson(Long id, Person entity) {
-        log.debug("");
+        log.debug("Updating person with id: '{}'", id);
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.debug("");
-                    return new EntityNotFoundException();
+                    log.debug("Entity not found");
+                    return new EntityNotFoundException("Entity not found");
                 });
         person.setFirstName(entity.getFirstName());
         person.setLastName(entity.getLastName());
         person.setDateOfBirth(entity.getDateOfBirth());
-        log.debug("");
+        log.debug("Person successfully updated");
     }
 
     @Override
     public void deletePerson(Long id) {
-        log.debug("");
+        log.debug("Deleting person with id: '{}'", id);
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.debug("");
-                    return new EntityNotFoundException();
+                    log.debug("Entity not found");
+                    return new EntityNotFoundException("Entity not found");
                 });
         personRepository.delete(person);
-        log.debug("");
+        log.debug("Person successfully deleted");
     }
 
     @Override
     public Person getPersonById(Long id) {
-        log.debug("");
+        log.debug("Fetching person with id: '{}'", id);
         return personRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.debug("");
-                    return new EntityNotFoundException();
+                    log.debug("Entity not found");
+                    return new EntityNotFoundException("Entity not found");
                 });
     }
 
     @Override
     public Page<Person> getAll(Pageable pageable) {
-        log.debug("");
+        log.debug("Fetching all persons");
         return personRepository.findAll(pageable);
     }
 }
