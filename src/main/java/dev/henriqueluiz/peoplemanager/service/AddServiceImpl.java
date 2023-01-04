@@ -39,7 +39,7 @@ public class AddServiceImpl implements AddService {
             log.debug("");
             throw new IllegalStateException();
         }
-        entity.getPerson().add(person);
+        entity.getPersons().add(person);
         return addressRepository.save(entity);
     }
 

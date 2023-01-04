@@ -11,16 +11,19 @@ import java.util.Optional;
 public interface AddressRepository extends JpaRepository<Address, Long> {
     @Query(
             "SELECT a FROM Address a JOIN Person p " +
-                    "ON p.id = ?1 AND a.id = ?2"
+                    "ON p.personId = ?1 AND a.addressId = ?2"
     )
     Optional<Address> findByPersonId(Long personId, Long addressId);
 
     @Query(
             "SELECT a FROM Address a JOIN Person p " +
-                    "ON p.id = ?1 AND a.preferred IS TRUE"
+                    "ON p.personId = ?1 AND a.preferred = TRUE"
     )
-    Optional<Address> findByPreferred(Long id);
+    Optional<Address> findByPreferred(Long personId);
 
-    @Query("SELECT a FROM Address WHERE a.person.id = ?1")
-    Page<Address> findAllByPersonId(Long id, Pageable pageable);
+    @Query(
+            "SELECT a FROM Address a JOIN Person p " +
+                    "ON p.personId = ?1"
+    )
+    Page<Address> findAllByPersonId(Long personId, Pageable pageable);
 }
