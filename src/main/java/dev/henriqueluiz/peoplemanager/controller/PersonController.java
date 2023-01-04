@@ -5,6 +5,7 @@ package dev.henriqueluiz.peoplemanager.controller;
  * @Github: heenluy
  */
 
+import dev.henriqueluiz.peoplemanager.model.Address;
 import dev.henriqueluiz.peoplemanager.model.Person;
 import dev.henriqueluiz.peoplemanager.service.PersonService;
 import jakarta.validation.Valid;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +34,24 @@ public class PersonController {
                         .port(8080)
                         .path("/persons/save")
                         .toUriString());
-        return ResponseEntity.created(uri).body(personService.savePerson(req));
+        // HATEOAS
+        Person response = personService.savePerson(req);
+        response.add(
+                linkTo(methodOn(AddressController.class)
+                        .saveAddress(req.getPersonId(), new Address()))
+                        .withRel("createAddress")
+        );
+        response.add(
+                linkTo(methodOn(PersonController.class)
+                        .getPerson(req.getPersonId()))
+                        .withSelfRel()
+        );
+        response.add(
+                linkTo(methodOn(PersonController.class)
+                        .getAll(Pageable.ofSize(3)))
+                        .withSelfRel()
+        );
+        return ResponseEntity.created(uri).body(response);
     }
 
     @PutMapping(value = { "/persons/update" }, produces = { "application/json" })
@@ -48,6 +69,21 @@ public class PersonController {
     @GetMapping(value = { "/persons/get" }, produces = { "application/hal+json" })
     public ResponseEntity<Person> getPerson(@RequestParam Long id) {
         Person response = personService.getPersonById(id);
+        response.add(
+                linkTo(methodOn(PersonController.class)
+                        .updatePerson(id, new Person()))
+                        .withSelfRel()
+        );
+        response.add(
+                linkTo(methodOn(PersonController.class)
+                        .deletePerson(id))
+                        .withSelfRel()
+        );
+        response.add(
+                linkTo(methodOn(AddressController.class)
+                        .getAll(id, Pageable.ofSize(3)))
+                        .withRel("getAddressesByPerson")
+        );
         return ResponseEntity.ok(response);
     }
 
