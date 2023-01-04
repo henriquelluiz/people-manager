@@ -1,0 +1,1 @@
+INSERT INTO app_user (email, password, authorities) VALUES ('test@mail.dev', 'test', ARRAY['']);
