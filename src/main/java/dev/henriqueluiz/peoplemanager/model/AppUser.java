@@ -5,10 +5,7 @@ package dev.henriqueluiz.peoplemanager.model;
  * @Github: heenluy
  */
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,10 +18,12 @@ import java.util.Objects;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "AppUser", uniqueConstraints = {
+        @UniqueConstraint(name = "uc_email", columnNames = {"email"})
+})
 public class AppUser {
     @Id
     @GeneratedValue(strategy = IDENTITY)

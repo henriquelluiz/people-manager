@@ -5,9 +5,7 @@ package dev.henriqueluiz.peoplemanager.model;
  * @Github: heenluy
  */
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +19,9 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "Role", uniqueConstraints = {
+        @UniqueConstraint(name = "uc_role_name", columnNames = {"name"})
+})
 public class Role {
     @Id
     @GeneratedValue(strategy = IDENTITY)
