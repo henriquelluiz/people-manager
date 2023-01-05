@@ -64,7 +64,7 @@ public class AddressController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = { "/addresses/get/preferential" }, produces = { "application/hal+json" })
+    @GetMapping(value = { "/addresses/get/preferred" }, produces = { "application/hal+json" })
     public ResponseEntity<Address> getPreferential(@RequestParam Long personId) {
         Address response = addressService.getPreferentialAddress(personId);
         response.add(
@@ -80,7 +80,7 @@ public class AddressController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping(value = { "/addresses/edit/preferential" }, produces = { "application/json" })
+    @PutMapping(value = { "/addresses/edit/preferred" }, produces = { "application/json" })
     public ResponseEntity<Void> setPreferential(@RequestParam Long personId, @RequestParam Long addressId) {
         addressService.setPreferentialAddress(personId, addressId);
         return ResponseEntity.noContent().build();
