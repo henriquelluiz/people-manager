@@ -5,7 +5,6 @@ package dev.henriqueluiz.peoplemanager.service;
  * @Github: heenluy
  */
 
-import dev.henriqueluiz.peoplemanager.exception.model.InvalidTokenException;
 import dev.henriqueluiz.peoplemanager.model.AppUser;
 import dev.henriqueluiz.peoplemanager.repository.UserRepository;
 import dev.henriqueluiz.peoplemanager.web.response.TokenResponse;
@@ -85,11 +84,6 @@ public class TokenServiceImpl implements TokenService {
     private AppUser getUserBySubject(String token) {
         Jwt jwt = this.jwtDecoder.decode(token);
         String email = Objects.requireNonNull(jwt.getSubject());
-        Instant expiresAt = Objects.requireNonNull(jwt.getExpiresAt());
-
-        if((expiresAt.isBefore(Instant.now()))) {
-            throw new InvalidTokenException("Token is not valid");
-        }
 
         return userRepository.findByEmail(email).orElseThrow(() -> {
             log.debug("User not found: '{}'", email);
