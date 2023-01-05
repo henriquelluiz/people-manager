@@ -55,33 +55,33 @@ public class PersonController {
     }
 
     @PutMapping(value = { "/persons/update" }, produces = { "application/json" })
-    public ResponseEntity<Void> updatePerson(@RequestParam Long id, @RequestBody @Valid Person body) {
-        personService.updatePerson(id, body);
+    public ResponseEntity<Void> updatePerson(@RequestParam Long personId, @RequestBody @Valid Person body) {
+        personService.updatePerson(personId, body);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = { "/persons/delete" }, produces = { "application/json" })
-    public ResponseEntity<Void> deletePerson(@RequestParam Long id) {
-        personService.deletePerson(id);
+    public ResponseEntity<Void> deletePerson(@RequestParam Long personId) {
+        personService.deletePerson(personId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping(value = { "/persons/get" }, produces = { "application/hal+json" })
-    public ResponseEntity<Person> getPerson(@RequestParam Long id) {
-        Person response = personService.getPersonById(id);
+    public ResponseEntity<Person> getPerson(@RequestParam Long personId) {
+        Person response = personService.getPersonById(personId);
         response.add(
                 linkTo(methodOn(PersonController.class)
-                        .updatePerson(id, new Person()))
+                        .updatePerson(personId, new Person()))
                         .withSelfRel()
         );
         response.add(
                 linkTo(methodOn(PersonController.class)
-                        .deletePerson(id))
+                        .deletePerson(personId))
                         .withSelfRel()
         );
         response.add(
                 linkTo(methodOn(AddressController.class)
-                        .getAll(id, Pageable.ofSize(3)))
+                        .getAll(personId, Pageable.ofSize(3)))
                         .withRel("getAddressesByPerson")
         );
         return ResponseEntity.ok(response);
