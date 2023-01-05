@@ -30,7 +30,6 @@ public class AuthenticationController {
 
     @PostMapping(value = { "/token" }, produces = { "application/json" })
     public ResponseEntity<TokenResponse> generateTokens(@RequestBody @Valid UserRequest req) {
-        log.debug("");
         var authenticationToken = new UsernamePasswordAuthenticationToken(req.email(), req.password());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         return ResponseEntity.ok(tokenService.getTokens(authentication));
@@ -38,7 +37,6 @@ public class AuthenticationController {
 
     @GetMapping(value = { "/refresh" }, produces = { "application/json" })
     public ResponseEntity<TokenResponse> refreshTokens(@RequestBody @Valid RefreshTokenRequest req) {
-        log.debug("");
         return ResponseEntity.ok(tokenService.refreshTokens(req.token()));
     }
 }
