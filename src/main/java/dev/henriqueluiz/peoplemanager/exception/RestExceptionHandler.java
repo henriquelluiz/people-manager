@@ -5,7 +5,10 @@ package dev.henriqueluiz.peoplemanager.exception;
  * @Github: heenluy
  */
 
-import dev.henriqueluiz.peoplemanager.exception.model.*;
+import dev.henriqueluiz.peoplemanager.exception.model.AbstractException;
+import dev.henriqueluiz.peoplemanager.exception.model.RoleNotFoundException;
+import dev.henriqueluiz.peoplemanager.exception.model.ValidationError;
+import dev.henriqueluiz.peoplemanager.exception.model.ValidationField;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,7 +17,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.jwt.BadJwtException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,7 +44,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodRoleNotFound(RuntimeException ex, WebRequest request) {
         var body = new AbstractException();
         body.setStatus(404);
-        body.setTitle("Bad Request");
+        body.setTitle("Not found");
         body.setDetails("Role not found");
         return super.handleExceptionInternal(ex, body, new HttpHeaders(), NOT_FOUND, request);
     }
@@ -52,7 +54,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodUsernameNotFound(RuntimeException ex, WebRequest request) {
         var body = new AbstractException();
         body.setStatus(404);
-        body.setTitle("Bad Request");
+        body.setTitle("Not found");
         body.setDetails("Username not found");
         return super.handleExceptionInternal(ex, body, new HttpHeaders(), NOT_FOUND, request);
     }
@@ -68,21 +70,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Nullable
-    @ExceptionHandler(value = { InvalidTokenException.class, BadJwtException.class })
-    protected ResponseEntity<Object> handleMethodJwtRejected(RuntimeException ex, WebRequest request) {
-        var body = new AbstractException();
-        body.setStatus(401);
-        body.setTitle("Token rejected");
-        body.setDetails("An error occurred while attempting to decode the Jwt");
-        return super.handleExceptionInternal(ex, body, new HttpHeaders(), UNAUTHORIZED, request);
-    }
-
-    @Nullable
     @ExceptionHandler(value = DataIntegrityViolationException.class)
     protected ResponseEntity<Object> handleMethodEmailAlreadyExists(RuntimeException ex, WebRequest request) {
         var body = new AbstractException();
         body.setStatus(400);
-        body.setTitle("Bad Request");
+        body.setTitle("Bad request");
         body.setDetails("Email or role name already exists");
         return super.handleExceptionInternal(ex, body, new HttpHeaders(), BAD_REQUEST, request);
     }
@@ -92,7 +84,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodEntityNotFound(RuntimeException ex, WebRequest request) {
         var body = new AbstractException();
         body.setStatus(404);
-        body.setTitle("Bad Request");
+        body.setTitle("Not found");
         body.setDetails("Entity not found");
         return super.handleExceptionInternal(ex, body, new HttpHeaders(), NOT_FOUND, request);
     }
