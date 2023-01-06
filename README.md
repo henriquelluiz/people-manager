@@ -23,11 +23,11 @@ API RESTful que deve ser capaz de:
 ## Como rodar localmente
 Bom, eu separei três maneiras de implementação(deploy):
 1. Simples, a partir de um JAR gerado;
-2. Docker, a partir de um DOCKERFILE;
-3. Kubernetes, a partir da pasta K8S;
+2. Docker, a partir de uma imagem;
+3. Kubernetes, a partir de arquivos yaml;
 
 ### Deploy simples
-É necessário ter o OpenSSL instalado.
+É necessário ter o Openssl instalado.
 
 Execute o comando a seguir:
 
@@ -86,12 +86,12 @@ chmod +x kubernetesDeploy.sh
 
 ## Detalhes
 Eu criei a entidade Endereço independente da Pessoa. Isso significa que uma pessoa não precisa ter um endereço.
-  - Veja: [Entidade Pessoa](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/model/Person.java) e [Entidade Endereço](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/model/Address.java).
+  > Veja: [Entidade Pessoa](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/model/Person.java) e [Entidade Endereço](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/model/Address.java).
 
 Você pode definir um endereço preferncial a qualquer momento.
 Você só pode ter um endereço prefencial.
 
-  - Veja: [Controlador de Endereço](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/controller/AddressController.java)
+  > Veja: [Controlador de Endereço](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/controller/AddressController.java)
 
 A aplicação já inicia com um usuário padrão: 
   - Username: developer@account.dev
