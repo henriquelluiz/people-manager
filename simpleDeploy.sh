@@ -8,7 +8,11 @@ JAR_FILE=target/peoplemanager-0.0.1.jar
 { echo "[ERROR] Diretório '$CERTS_DIR' não encontrado"; exit; }
 
 [ ! -e $KEY ] &&
-{ echo "[ERROR] Certificados não encontrados"; exit; }
+{
+    echo "[ERROR] Chaves não encontradas";
+    echo "[INFO] Execute o arquivo 'generateKeys.sh' e tente novamente";
+    exit;
+}
 
 echo "[DEPLOY] Gerando o arquivo 'JAR'"
 bash mvnw package
