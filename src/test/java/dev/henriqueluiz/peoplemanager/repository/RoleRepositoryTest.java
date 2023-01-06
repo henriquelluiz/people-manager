@@ -25,8 +25,8 @@ public class RoleRepositoryTest {
     @Sql(scripts = "insertRole.sql", executionPhase = BEFORE_TEST_METHOD)
     @Sql(scripts = "deleteRole.sql", executionPhase = AFTER_TEST_METHOD)
     void givenRoleName_whenRun_thenRoleEntityIsExpected() {
-        Role role = repository.findByName("test2").orElseThrow();
+        Role role = repository.findByName("test_0").orElseThrow();
         assertThat(role.getId()).isNotNull();
-        assertThat(role.getName()).isEqualTo("test2");
+        assertThat(role.getName()).isEqualTo("test_0");
     }
 }

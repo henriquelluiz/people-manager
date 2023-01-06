@@ -101,7 +101,7 @@ public class UserControllerTest {
 
         result.andExpect(status().isOk());
         result.andExpect(jsonPath("$._embedded.roleList").isNotEmpty());
-        result.andExpect(jsonPath("$._embedded.roleList[0].name").value("test"));
+        result.andExpect(jsonPath("$._embedded.roleList[0].name").value("test_2"));
         result.andDo(print());
     }
 
@@ -159,7 +159,7 @@ public class UserControllerTest {
             executionPhase = AFTER_TEST_METHOD
     )
     void givenRoleNameAndUserEmail_whenCall_thenOkResponseStatusIsExpected() throws Exception {
-        var requestBody = new RoleUserRequest("test", "test@mail.dev");
+        var requestBody = new RoleUserRequest("test_2", "test@mail.dev");
         String request = mapper.writeValueAsString(requestBody);
         ResultActions result = mvc.perform(
                 put("/roles/add")
