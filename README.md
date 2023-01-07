@@ -85,7 +85,10 @@ chmod +x kubernetesDeploy.sh
 *Vai criar a imagem docker, criar os pods e abrir o navegador padrão com a aplicação rodando.*
 
 ## Detalhes
-Eu criei a entidade Endereço independente da Pessoa. Isso significa que uma pessoa não precisa ter um endereço.
+Eu criei a entidade Endereço tendo relação many-to-many com a entidade Pessoa.
+
+**Motivo:** pessoas que moram na mesma casa têm o mesmo endereço.
+
   > Veja: [Entidade Pessoa](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/model/Person.java) e [Entidade Endereço](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/model/Address.java).
 
 Você pode definir um endereço preferncial a qualquer momento.
@@ -102,7 +105,7 @@ A aplicação já inicia com um usuário padrão:
 ## Melhorias
 Caso queira fazer o deploy em alguma plataforma, eu recomendaria:
 1. Configurar o CORS;
-2. Configurar o CSFR;
+2. Configurar o CSRF;
 3. Adicio algum sistema de métricas com Prometheus e Grafana.
 4. Talvez adicionar o Swegger para documentação.
 

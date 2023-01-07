@@ -69,7 +69,7 @@ Resposta esperada:
 ### User Controller: Save Role
 Cria uma função.
 
-> Somente para usuários com a role 'manager'.
+> Somente para usuários com a role **manager**.
 
 ```bash
 curl -X POST \
@@ -102,9 +102,9 @@ Resposta esperada:
 ### User Controller: Add Roles to User
 Adiciona uma função/cargo ao usuário.
 
-> Inicialmente, há duas opções de roles: 'read' ou 'write'.
+> Inicialmente existem duas opções de roles/scopes: **read** ou **write**.
 
-> Se você tentar adicionar a função 'manager' ou 'admin', você recebera UNAUTHORIZED.
+> Se você tentar adicionar a role **manager** ou **admin**, você recebera **UNAUTHORIZED**.
 
 ```bash
 curl -X PUT \
@@ -157,7 +157,7 @@ Resposta esperada:
 }
 ```
 
-### User Controller: Get Tokens
+### User Controller: Refresh Tokens
 Criar novos tokens a partir de um refresh token.
 
 ```bash
@@ -204,7 +204,7 @@ Resposta esperada:
 
 ```json
 {
-  "personId": ?,
+  "personId": 1,
   "firstName": "Nome",
   "lastName": "Sobrenome",
   "dateOfBirth": "dd-MM-yyyy",
@@ -253,6 +253,207 @@ Resposta esperada:
     "getAddressesByPerson": {
       "href": "http://localhost:8080/api/addresses/get/all?personId=1"
     }
+  }
+}
+```
+
+### Person Controller: Get All Persons
+Procura por todas as pessoas disponíveis.
+
+```bash
+curl -X GET \
+  'http://localhost:8080/api/persons/get/all?page=0&size=1' \
+  --header 'Accept: application/hal+json' \
+  --header 'Authorization: Bearer <token>'
+```
+Resposta esperada:
+
+```json
+{
+  "_embedded": {
+    "personList": [
+      {
+        "personId": 1,
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "dateOfBirth": "dd-MM-yyyy"
+      }
+    ]
+  }
+}
+```
+
+### Person Controller: Update Person
+Atualiza uma pessoa.
+
+```bash
+curl -X PUT \
+  'http://localhost:8080/api/persons/update?personId=1' \
+  --header 'Accept: application/json' \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "firstName": "Nome",
+  "lastName": "Sobrenome",
+  "dateOfBirth": "dd-MM-yyyy"
+}'
+```
+Resposta esperada:
+
+```http
+No content 204
+```
+
+### Person Controller: Delete Person
+Remove uma pessoa.
+
+```bash
+curl -X DELETE \
+  'http://localhost:8080/api/persons/delete?personId=1' \
+  --header 'Accept: application/json' \
+  --header 'Authorization: Bearer <token>'
+```
+Resposta esperada:
+
+```http
+No content 204
+```
+
+### Address Controller: Save Address
+Cria um endereço para uma pessoa específica.
+
+```bash
+curl -X POST \
+  'http://localhost:8080/api/addresses/save?personId=2' \
+  --header 'Accept: application/hal+json' \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "city": "Rio de Janeiro",
+  "number": "29A",
+  "street": "Rua Ipanema",
+  "postalCode": "15698437"
+}'
+```
+Resposta esperada:
+
+```json
+{
+  "addressId": 1,
+  "street": "Rua Ipanema",
+  "postalCode": "15698437",
+  "number": "29A",
+  "city": "Rio de Janeiro",
+  "preferred": false,
+  "persons": [
+    {
+      "personId": 2,
+      "firstName": "Henrique",
+      "lastName": "Luiz",
+      "dateOfBirth": "14-06-1999"
+    }
+  ],
+  "_links": {
+    "self": [
+      {
+        "href": "http://localhost:8080/api/addresses/edit/preferred?personId=2&addressId=1"
+      },
+      {
+        "href": "http://localhost:8080/api/addresses/get/all?personId=2"
+      }
+    ]
+  }
+}
+```
+
+### Address Controller: Get All Addresses By Person
+Busca por todos os endereços de uma pessoa.
+
+```bash
+curl -X GET \
+  'http://localhost:8080/api/addresses/get/all?personId=1&page=0&size=1' \
+  --header 'Accept: application/hal+json' \
+  --header 'Authorization: Bearer <token>'
+```
+Resposta esperada:
+
+```json
+{
+  "_embedded": {
+    "addressList": [
+      {
+        "addressId": 1,
+        "street": "Rua Ipanema",
+        "postalCode": "15698437",
+        "number": "29A",
+        "city": "Rio de Janeiro",
+        "preferred": false,
+        "persons": [
+          {
+            "personId": 2,
+            "firstName": "Henrique",
+            "lastName": "Luiz",
+            "dateOfBirth": "14-06-1999"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Address Controller: Set Preferred
+Define o endereço prefencial/principal da pessoa.
+
+```bash
+curl -X PUT \
+  'http://localhost:8080/api/addresses/edit/preferred?personId=2&addressId=1' \
+  --header 'Accept: application/json' \
+  --header 'Authorization: Bearer <token>'
+```
+Resposta esperada:
+
+```http
+No content 204
+```
+
+### Address Controller: Get Preferred
+Busca o endereço prefencial/principal da pessoa.
+
+```bash
+curl -X GET \
+  'http://localhost:8080/api/addresses/get/preferred?personId=2&addressId=1' \
+  --header 'Accept: application/hal+json' \
+  --header 'Authorization: Bearer <token>'
+```
+Resposta esperada:
+
+```json
+{
+  "addressId": 1,
+  "street": "Rua Ipanema",
+  "postalCode": "15698437",
+  "number": "29A",
+  "city": "Rio de Janeiro",
+  "preferred": true,
+  "persons": [
+    {
+      "personId": 2,
+      "firstName": "Henrique",
+      "lastName": "Luiz",
+      "dateOfBirth": "14-06-1999"
+    }
+  ],
+  "_links": {
+    "self": [
+      {
+        "href": "http://localhost:8080/api/addresses/edit/preferred?personId=2&addressId={addressId}",
+        "templated": true
+      },
+      {
+        "href": "http://localhost:8080/api/addresses/get/all?personId=2"
+      }
+    ]
   }
 }
 ```
