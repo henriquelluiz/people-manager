@@ -45,7 +45,7 @@ public class PersonControllerTest {
             executionPhase = AFTER_TEST_METHOD
     )
     void givenPerson_whenCall_thenCreatedResponseStatusIsExpected() throws Exception {
-        Person person = new Person(null, "Joseph", "Carlos", LocalDate.of(1998, 9, 21));
+        Person person = new Person("Joseph", "Carlos", LocalDate.of(1998, 9, 21));
         String request = mapper.writeValueAsString(person);
 
         ResultActions result = mvc.perform(
@@ -71,7 +71,7 @@ public class PersonControllerTest {
             executionPhase = AFTER_TEST_METHOD
     )
     void givenIdAndPerson_whenCall_thenNoContentResponseStatusIsExpected() throws Exception {
-        Person person = new Person(null, "Joseph", "Carlos", LocalDate.of(1998, 9, 21));
+        Person person = new Person("Joseph", "Carlos", LocalDate.of(1998, 9, 21));
         String request = mapper.writeValueAsString(person);
 
         ResultActions result = mvc.perform(

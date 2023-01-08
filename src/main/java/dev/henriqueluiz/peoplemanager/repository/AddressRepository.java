@@ -16,14 +16,11 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     Optional<Address> findByPersonId(Long personId, Long addressId);
 
     @Query(
-            "SELECT a FROM Address a JOIN Person p " +
-                    "ON p.personId = ?1 AND a.preferred = TRUE"
+            "SELECT a FROM Address a WHERE a.person.personId = ?1 " +
+                    "AND a.preferred = TRUE"
     )
     Optional<Address> findByPreferred(Long personId);
 
-    @Query(
-            "SELECT a FROM Address a JOIN Person p " +
-                    "ON p.personId = ?1"
-    )
+    @Query("SELECT a FROM Address a WHERE a.person.personId = ?1")
     Page<Address> findAllByPersonId(Long personId, Pageable pageable);
 }

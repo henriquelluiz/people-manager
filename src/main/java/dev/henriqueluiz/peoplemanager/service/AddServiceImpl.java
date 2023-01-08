@@ -40,7 +40,7 @@ public class AddServiceImpl implements AddService {
             Optional<Address> preferred = addressRepository.findByPreferred(personId);
             preferred.ifPresent(address -> address.setPreferred(false));
         }
-        entity.getPersons().add(person);
+        entity.setPerson(person);
         return addressRepository.save(entity);
     }
 

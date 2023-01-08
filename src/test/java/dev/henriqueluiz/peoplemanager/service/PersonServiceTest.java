@@ -32,7 +32,7 @@ public class PersonServiceTest {
             executionPhase = AFTER_TEST_METHOD
     )
     void givenPerson_whenCall_thenPersonEntityIsExpected() {
-        Person person = new Person(null, "Henrique", "Luiz", LocalDate.of(1999, 6, 14));
+        Person person = new Person("Henrique", "Luiz", LocalDate.of(1999, 6, 14));
         Person result = service.savePerson(person);
         assertThat(result.getPersonId()).isNotNull();
         assertThat(result.getDateOfBirth()).isEqualTo(person.getDateOfBirth());
@@ -48,7 +48,7 @@ public class PersonServiceTest {
             executionPhase = AFTER_TEST_METHOD
     )
     void givenIdAndPerson_whenCall_thenPersonEntityIsExpected() {
-        Person person = new Person(null, "Joseph", "Carlos", LocalDate.of(1998, 9, 21));
+        Person person = new Person("Joseph", "Carlos", LocalDate.of(1998, 9, 21));
         assertThatCode(() -> service.updatePerson(1L, person))
                 .doesNotThrowAnyException();
     }

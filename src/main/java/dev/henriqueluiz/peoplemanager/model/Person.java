@@ -6,13 +6,11 @@ package dev.henriqueluiz.peoplemanager.model;
  */
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,14 +18,16 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
+import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Relation(collectionRelation = "personList")
 public class Person extends RepresentationModel<Person> {
     @Id
@@ -44,6 +44,17 @@ public class Person extends RepresentationModel<Person> {
     @NotNull
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
+
+    @Nullable
+    @JsonIgnore
+    @OneToMany(cascade = REMOVE, mappedBy = "person")
+    private Collection<Address> addresses = new ArrayList<>();
+
+    public Person(String firstName, String lastName, LocalDate dateOfBirth) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+    }
 
     @Override
     public boolean equals(Object o) {

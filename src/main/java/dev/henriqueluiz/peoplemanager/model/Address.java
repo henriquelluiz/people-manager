@@ -5,6 +5,7 @@ package dev.henriqueluiz.peoplemanager.model;
  * @Github: heenluy
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,8 +17,6 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Objects;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -49,13 +48,10 @@ public class Address extends RepresentationModel<Address> {
     @NotNull
     private Boolean preferred = false;
 
-    @ManyToMany
-    @JoinTable(
-            name = "person_address",
-            joinColumns = @JoinColumn(name = "person_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id")
-    )
-    private Collection<Person> persons = new ArrayList<>();
+    @JsonIgnore
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "personId")
+    private Person person;
 
     @Override
     public boolean equals(Object o) {
