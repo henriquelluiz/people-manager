@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface AddressRepository extends JpaRepository<Address, Long> {
     @Query(
-            "SELECT a FROM Address a JOIN Person p " +
-                    "ON p.personId = ?1 AND a.addressId = ?2"
+            "SELECT a FROM Address a WHERE a.person.personId = ?1 " +
+                    "AND a.addressId = ?2"
     )
     Optional<Address> findByPersonId(Long personId, Long addressId);
 
