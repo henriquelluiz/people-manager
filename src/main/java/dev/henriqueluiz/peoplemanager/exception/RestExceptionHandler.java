@@ -5,10 +5,7 @@ package dev.henriqueluiz.peoplemanager.exception;
  * @Github: heenluy
  */
 
-import dev.henriqueluiz.peoplemanager.exception.model.AbstractException;
-import dev.henriqueluiz.peoplemanager.exception.model.RoleNotFoundException;
-import dev.henriqueluiz.peoplemanager.exception.model.ValidationError;
-import dev.henriqueluiz.peoplemanager.exception.model.ValidationField;
+import dev.henriqueluiz.peoplemanager.exception.model.*;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -47,6 +44,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         body.setTitle("Not found");
         body.setDetails("Role not found");
         return super.handleExceptionInternal(ex, body, new HttpHeaders(), NOT_FOUND, request);
+    }
+
+    @Nullable
+    @ExceptionHandler(value = RoleNotAllowedException.class)
+    protected ResponseEntity<Object> handleMethodRoleNotAllowed(RuntimeException ex, WebRequest request) {
+        var body = new AbstractException();
+        body.setStatus(405);
+        body.setTitle("Role not Allowed");
+        body.setDetails("Only managers can add manager or admin roles");
+        return super.handleExceptionInternal(ex, body, new HttpHeaders(), METHOD_NOT_ALLOWED, request);
     }
 
     @Nullable

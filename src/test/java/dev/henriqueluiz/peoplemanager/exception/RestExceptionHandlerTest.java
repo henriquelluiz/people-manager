@@ -140,6 +140,23 @@ public class RestExceptionHandlerTest {
     }
 
     @Test
+    void givenManagerOrAdminRoleRequest_whenThrow_thenMethodNotAllowedResponseIsExpected() throws Exception {
+        var requestBody = new RoleUserRequest("manager", "test@mail.dev");
+        String request = mapper.writeValueAsString(requestBody);
+        ResultActions result = mvc.perform(
+                put("/roles/add")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(JSON_HAL_VALUE)
+                        .content(request));
+
+        result.andExpect(status().isMethodNotAllowed());
+        result.andExpect(jsonPath("$.status").value(405));
+        result.andExpect(jsonPath("$.title").value("Role not Allowed"));
+        result.andExpect(jsonPath("$.details").value("Only managers can add manager or admin roles"));
+        result.andDo(print());
+    }
+
+    @Test
     void givenNoNExistentPersonId_whenThrow_thenNotFoundResponseIsExpected() throws Exception {
         ResultActions result = mvc.perform(
                 get("/persons/get")
