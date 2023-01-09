@@ -2,7 +2,7 @@
 O projeto People Manager é um teste prático para a vaga de desenvolvedor back-end na Attornatus Procuradoria Digital.
 
 ## Requisitos Funcionais
-API RESTful que deve ser capaz de: 
+Uma API RESTful que deve ser capaz de: 
 1. Criar uma entidade Pessoa;
 2. Editar uma Pessoa;
 3. Consultar uma Pessoa;
@@ -11,26 +11,23 @@ API RESTful que deve ser capaz de:
 6. Listar todos os endereços de uma pessoa;
 7. Poder definir qual endereço é o principal.
 
-## O Que você vai encontrar
-1. Spring Boot 3
-2. Java 17
-3. JWT Authentication
-4. HATEOAS
-5. H2 Database
-6. Clean Code
-7. Testes de Aceitação, de Integração e Unitários
-8. Deploy(implementação) automátizada com shell scripting.
+## O Que Você Vai Encontrar
+- Spring Boot 3
+- Java 17
+- JWT Authentication
+- HATEOAS
+- JPA
+- Clean Code
+- Testes de Aceitação, de Integração e Unitários
+- Deploy automátizado com shell scripting.
 
-## Como rodar localmente
-Bom, eu separei três maneiras de implementação(deploy):
-1. Simples, a partir de um JAR gerado;
-2. Docker, a partir de uma imagem;
-3. Kubernetes, a partir de arquivos yaml;
+## Como Rodar Localmente
+Você pode iniciar essa aplicação de três formas: a partir de um arquivo *.jar, com docker ou com kubernetes/minikube.
 
-### Deploy simples
-É necessário ter o Openssl instalado.
+### Deploy Simples Com um Arquivo *.jar
+É necessário ter o [OpenSSL](https://www.openssl.org/source/) instalado – ele já vem instalado na maioria das distros Linux.
 
-Execute o comando a seguir:
+Antes de tudo, é preciso gerar as chaves RSA 256. Portanto, execute o comando a seguir:
 
 ```bash
 chmod +x generateKeys.sh
@@ -44,21 +41,15 @@ Em seguida execute:
 chmod +x simpleDeploy.sh
 ./simpleDeploy.sh
 ``` 
-> Isso vai fazer o build com MVN, gerar o arquivo JAR e executá-lo.
+> Isso vai fazer o build com MVN, gerar o arquivo **peoplemanager-0.0.1.jar** e executá-lo.
 
 
-### Deploy com Docker
-É necessário ter o Docker instalado e com acesso NON-ROOT.
-Caso não tenha, confira: [Pós-instalação](https://docs.docker.com/engine/install/linux-postinstall/)
+### Deploy Com Docker
+É necessário ter o Docker instalado e com acesso non-root.
+Caso não tenha, confira: [Pós-instalação do Docker no Linux.](https://docs.docker.com/engine/install/linux-postinstall/)
 
-Execute o comando a seguir (se já o executou, não precisa):
-
-```bash
-chmod +x generateKeys.sh
-./generateKeys.sh
-``` 
-
-Em seguida execute:
+Execute os comandos a seguir:
+> **As chaves RSA são requeridas.**
 
 ```bash
 chmod +x dockerDeploy.sh
@@ -67,45 +58,39 @@ chmod +x dockerDeploy.sh
 > Isso irá criar a imagem e executá-la.
 
 
-### Deploy com Kubernetes
-É necessário ter o Docker instalado e com acesso NON-ROOT, Minikube e Kubectl.
+### Deploy Com Kubernetes/Minikube
+É necessário ter instaldos em sua máquina o [Docker](https://docs.docker.com/engine/install/ubuntu/), [Minikube](https://minikube.sigs.k8s.io/docs/start/) e [Kubectl](https://kubernetes.io/docs/tasks/tools/).
 
-Execute o comando a seguir (se já o executou, não precisa):
-
-```bash
-chmod +x generateKeys.sh
-./generateKeys.sh
-``` 
-
-Em seguida execute:
+Execute os comandos a seguir:
+> **As chaves RSA são requeridas.**
 
 ```bash
 chmod +x kubernetesDeploy.sh
 ./kubernetesDeploy.sh
 ``` 
-> Isso irá criar a imagem docker, criar os pods(deployment e service) e expor a rota/serviço.
+> Isso irá criar a imagem docker, criar os pods e expor a rota/serviço.
 
 ## Detalhes
-Eu criei a entidade Pessoa tendo relação **One-to-Many** com a entidade Endereço.
+Mapeamento relacional das entidades Pessoa e Endereço.
 
   > Veja: [Entidade Pessoa](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/model/Person.java) e [Entidade Endereço](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/model/Address.java).
 
-Você pode definir um endereço preferncial a qualquer momento.
-Você só pode ter um endereço prefencial.
+Você pode definir um endereço preferencial a qualquer momento. Mas, você só pode ter um endereço preferencial.
 
-  > Veja: [Controlador de Endereço](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/controller/AddressController.java)
+  > Veja: [Endpoint Endereço](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/controller/AddressController.java) e [Repositório Endereço](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/repository/AddressRepository.java).
 
 A aplicação já inicia com um usuário padrão: 
-  - Username: developer@account.dev
+  - Username/Email: developer@account.dev
   - Password: developer
+  - Authorities: Manager
 
-> Veja a documentação da API detalhada em [APIDOC.](https://github.com/heenluy/people-manager/blob/main/API.md)
+> **Veja a documentação da API detalhada em [API REFERENCE.](https://github.com/heenluy/people-manager/blob/main/API.md)**
 
 ## Melhorias
 Caso queira fazer o deploy em alguma plataforma, eu recomendaria:
 1. Configurar o CORS;
 2. Configurar o CSRF;
-3. Adicio algum sistema de métricas com Prometheus e Grafana.
+3. Adicionar algum sistema de métricas como o Prometheus/Grafana.
 4. Talvez adicionar o Swegger para documentação.
 
 **E é isso, até mais**✌️
