@@ -19,6 +19,7 @@ API RESTful que deve ser capaz de:
 5. H2 Database
 6. Clean Code
 7. Testes de Aceitação, de Integração e Unitários
+8. Deploy(implementação) automátizada com shell scripting.
 
 ## Como rodar localmente
 Bom, eu separei três maneiras de implementação(deploy):
@@ -35,7 +36,7 @@ Execute o comando a seguir:
 chmod +x generateKeys.sh
 ./generateKeys.sh
 ``` 
-*Ele irá criar as chaves RSA necessárias para autenticação.*
+> Isso irá criar as chaves RSA necessárias para autenticação.
 
 Em seguida execute:
 
@@ -43,7 +44,7 @@ Em seguida execute:
 chmod +x simpleDeploy.sh
 ./simpleDeploy.sh
 ``` 
-*Vai fazer o build com MVN, gerar o arquivo JAR e executá-lo.*
+> Isso vai fazer o build com MVN, gerar o arquivo JAR e executá-lo.
 
 
 ### Deploy com Docker
@@ -63,7 +64,7 @@ Em seguida execute:
 chmod +x dockerDeploy.sh
 ./dockerDeploy.sh
 ``` 
-*Vai criar a imagem e executá-la.*
+> Isso irá criar a imagem e executá-la.
 
 
 ### Deploy com Kubernetes
@@ -82,12 +83,10 @@ Em seguida execute:
 chmod +x kubernetesDeploy.sh
 ./kubernetesDeploy.sh
 ``` 
-*Vai criar a imagem docker, criar os pods e abrir o navegador padrão com a aplicação rodando.*
+> Isso irá criar a imagem docker, criar os pods(deployment e service) e expor a rota/serviço.
 
 ## Detalhes
-Eu criei a entidade Endereço tendo relação many-to-many com a entidade Pessoa.
-
-**Motivo:** pessoas que moram na mesma casa têm o mesmo endereço.
+Eu criei a entidade Pessoa tendo relação **One-to-Many** com a entidade Endereço.
 
   > Veja: [Entidade Pessoa](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/model/Person.java) e [Entidade Endereço](https://github.com/heenluy/people-manager/blob/main/src/main/java/dev/henriqueluiz/peoplemanager/model/Address.java).
 

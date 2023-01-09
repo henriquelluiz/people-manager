@@ -300,7 +300,7 @@ curl -X PUT \
 ```
 Resposta esperada:
 
-```http
+```
 No content 204
 ```
 
@@ -315,7 +315,7 @@ curl -X DELETE \
 ```
 Resposta esperada:
 
-```http
+```
 No content 204
 ```
 
@@ -329,10 +329,10 @@ curl -X POST \
   --header 'Authorization: Bearer <token>' \
   --header 'Content-Type: application/json' \
   --data-raw '{
-  "city": "Rio de Janeiro",
-  "number": "29A",
-  "street": "Rua Ipanema",
-  "postalCode": "15698437"
+  "city": "Cidade",
+  "number": "10A",
+  "street": "Rua",
+  "postalCode": "00000000"
 }'
 ```
 Resposta esperada:
@@ -340,23 +340,15 @@ Resposta esperada:
 ```json
 {
   "addressId": 1,
-  "street": "Rua Ipanema",
-  "postalCode": "15698437",
-  "number": "29A",
-  "city": "Rio de Janeiro",
+  "street": "Rua",
+  "postalCode": "00000000",
+  "number": "10A",
+  "city": "Cidade",
   "preferred": false,
-  "persons": [
-    {
-      "personId": 2,
-      "firstName": "Henrique",
-      "lastName": "Luiz",
-      "dateOfBirth": "14-06-1999"
-    }
-  ],
   "_links": {
     "self": [
       {
-        "href": "http://localhost:8080/api/addresses/edit/preferred?personId=2&addressId=1"
+        "href": "http://localhost:8080/api/addresses/edit/preferred?personId=2&addressId=4"
       },
       {
         "href": "http://localhost:8080/api/addresses/get/all?personId=2"
@@ -383,19 +375,19 @@ Resposta esperada:
     "addressList": [
       {
         "addressId": 1,
-        "street": "Rua Ipanema",
-        "postalCode": "15698437",
-        "number": "29A",
-        "city": "Rio de Janeiro",
-        "preferred": false,
-        "persons": [
-          {
-            "personId": 2,
-            "firstName": "Henrique",
-            "lastName": "Luiz",
-            "dateOfBirth": "14-06-1999"
-          }
-        ]
+        "street": "Rua",
+        "postalCode": "00000000",
+        "number": "10A",
+        "city": "Cidade",
+        "preferred": false
+      },
+      {
+        "addressId": 2,
+        "street": "Rua",
+        "postalCode": "00000000",
+        "number": "10B",
+        "city": "Cidade",
+        "preferred": true
       }
     ]
   }
@@ -413,7 +405,7 @@ curl -X PUT \
 ```
 Resposta esperada:
 
-```http
+```
 No content 204
 ```
 
@@ -430,20 +422,12 @@ Resposta esperada:
 
 ```json
 {
-  "addressId": 1,
-  "street": "Rua Ipanema",
-  "postalCode": "15698437",
-  "number": "29A",
-  "city": "Rio de Janeiro",
+  "addressId": 2,
+  "street": "Rua",
+  "postalCode": "",
+  "number": "10B",
+  "city": "Cidade",
   "preferred": true,
-  "persons": [
-    {
-      "personId": 2,
-      "firstName": "Henrique",
-      "lastName": "Luiz",
-      "dateOfBirth": "14-06-1999"
-    }
-  ],
   "_links": {
     "self": [
       {
