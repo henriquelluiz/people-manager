@@ -49,11 +49,5 @@ kubectl create -f k8s/appDeployment.yaml
 echo "[DEPLOY] Criando um serviço para o 'deployment'"
 kubectl create -f k8s/appService.yaml
 
-read -p '[DEPLOY] A aplicação será iniciada no seu navegador padrão, tudo bem? (SIM/NÃO): ' USER_ANSWER
-
-if [ "$USER_ANSWER" = "SIM" ] || [ "$USER_ANSWER" = "S" ] || [ "$USER_ANSWER" = "sim" ] || [ "$USER_ANSWER" = "s" ]; then
-    minikube service app-people-manager
-else
-echo "[DEPLOY] Você precisa expor o serviço 'kubectl port-forward service/app-people-manager 8080:8080'"
-exit;
-fi
+echo "[DEPLOY] A rota será exposta em 'localhost:8080/api'"
+kubectl port-forward service/app-people-manager 8080:8080
