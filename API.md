@@ -1,7 +1,8 @@
 ### Notas
-Usuário padrão com role de manager:
+Usuário padrão:
 - **Username:** developer@account.dev
 - **Senha:** developer
+- **Authorities:** manager 
 
 ### Health
 Verifique se a aplicação está funcionando corretamente.
@@ -56,7 +57,7 @@ Resposta esperada:
 
 ```json
 {
-  "email": "luiz@mail.dev",
+  "email": "test@mail.dev",
   "authorities": [],
   "_links": {
     "self": {
@@ -67,9 +68,11 @@ Resposta esperada:
 ```
 
 ### User Controller: Save Role
-Cria uma função.
+Cria uma função/cargo.
 
 > Somente para usuários com a role **manager**.
+
+> Pode ser em caixa alta ou caixa baixa: TEST ou test.
 
 ```bash
 curl -X POST \
@@ -102,9 +105,9 @@ Resposta esperada:
 ### User Controller: Add Roles to User
 Adiciona uma função/cargo ao usuário.
 
-> Inicialmente existem duas opções de roles/scopes: **read** ou **write**.
+> Inicialmente existem duas opções de roles/scopes pré-definidas: **read** ou **write**.
 
-> Se você tentar adicionar a role **manager** ou **admin**, você recebera **UNAUTHORIZED**.
+> Se você tentar adicionar a role **manager** ou **admin**, você recebera **Method Not Allowed (405)**.
 
 ```bash
 curl -X PUT \
@@ -113,7 +116,7 @@ curl -X PUT \
   --header 'Content-Type: application/json' \
   --data-raw '{
   "roleName": "read",
-  "userEmail": "luiz@mail.dev"
+  "userEmail": "test@mail.dev"
 }'
 ```
 Resposta esperada:
@@ -137,8 +140,8 @@ curl -X POST \
   --header 'Accept: application/json' \
   --header 'Content-Type: application/json' \
   --data-raw '{
-  "email": "developer@account.dev",
-  "password":"developer"
+  "email": "test@mail.dev",
+  "password":"test"
 }'
 ```
 Resposta esperada:
@@ -395,7 +398,7 @@ Resposta esperada:
 ```
 
 ### Address Controller: Set Preferred
-Define o endereço prefencial/principal da pessoa.
+Define o endereço preferencial/principal da pessoa.
 
 ```bash
 curl -X PUT \
@@ -410,7 +413,7 @@ No content 204
 ```
 
 ### Address Controller: Get Preferred
-Busca o endereço prefencial/principal da pessoa.
+Busca o endereço preferencial/principal da pessoa.
 
 ```bash
 curl -X GET \
