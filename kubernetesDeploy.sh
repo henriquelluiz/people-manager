@@ -26,22 +26,22 @@ if ! minikube version; then
     exit;
 fi
 
+echo "[DEPLOY] Gerando o arquivo 'JAR'"
+bash mvnw package
+
+minikube start --driver=docker
+eval $(minikube docker-env)
+
 if ! kubectl version; then
     echo "[ERROR] É preciso ter o kubectl instalado";
     exit;
 fi
-
-echo "[DEPLOY] Gerando o arquivo 'JAR'"
-bash mvnw package
 
 [ -e $JAR_FILE ]
 {
     echo "[DEPLOY] Criando imagem docker";
     docker build -t $IMAGE_NAME .;
 }
-
-minikube start --driver=docker
-eval '$(minikube docker-env)'
 
 echo "[DEPLOY] Criando o 'deployment'"
 kubectl create -f k8s/appDeployment.yaml

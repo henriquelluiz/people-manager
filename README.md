@@ -68,7 +68,15 @@ Execute os comandos a seguir:
 chmod +x kubernetesDeploy.sh
 ./kubernetesDeploy.sh
 ``` 
-> Isso irá criar a imagem docker, criar os pods e expor a rota/serviço.
+> Isso irá criar a imagem docker, criar o deployment.app e o service.
+
+Você deve expor a rota:
+
+```bash
+kubectl port-forward service/app-people-manager 8080:8080
+```
+
+> É a maneira mais rápida expor uma rota.
 
 ## Detalhes
 Mapeamento relacional das entidades Pessoa e Endereço.
