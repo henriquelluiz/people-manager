@@ -49,5 +49,4 @@ kubectl create -f k8s/appDeployment.yaml
 echo "[DEPLOY] Criando um serviço para o 'deployment'"
 kubectl create -f k8s/appService.yaml
 
-echo "[DEPLOY] A rota será exposta em 'localhost:8080/api'"
-kubectl port-forward service/app-people-manager 8080:8080
+echo "[WARN] Você precisa expor a rota 'kubectl port-forward service/app-people-manager 8080:8080'"
