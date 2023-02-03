@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
@@ -49,6 +50,7 @@ public class RestExceptionHandlerTest {
                 post("/users/save")
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(JSON_HAL_VALUE)
+                        .with(csrf())
                         .content(request));
 
         result.andExpect(status().isBadRequest());
@@ -66,6 +68,7 @@ public class RestExceptionHandlerTest {
                 put("/roles/add")
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(JSON_HAL_VALUE)
+                        .with(csrf())
                         .content(request));
 
         result.andExpect(status().isNotFound());
@@ -91,6 +94,7 @@ public class RestExceptionHandlerTest {
                 put("/roles/add")
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(JSON_HAL_VALUE)
+                        .with(csrf())
                         .content(request));
 
         result.andExpect(status().isNotFound());
@@ -107,6 +111,7 @@ public class RestExceptionHandlerTest {
                 post("/token")
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON)
+                        .with(csrf())
                         .content(request));
 
         result.andExpect(status().isUnauthorized());
@@ -130,6 +135,7 @@ public class RestExceptionHandlerTest {
                 post("/roles/save")
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(JSON_HAL_VALUE)
+                        .with(csrf())
                         .content(request));
 
         result.andExpect(status().isBadRequest());
@@ -147,6 +153,7 @@ public class RestExceptionHandlerTest {
                 put("/roles/add")
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(JSON_HAL_VALUE)
+                        .with(csrf())
                         .content(request));
 
         result.andExpect(status().isMethodNotAllowed());
