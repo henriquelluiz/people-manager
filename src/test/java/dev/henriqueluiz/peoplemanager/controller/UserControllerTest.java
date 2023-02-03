@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
@@ -53,6 +54,7 @@ public class UserControllerTest {
                 post("/users/save")
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(JSON_HAL_VALUE)
+                        .with(csrf())
                         .content(request));
 
         result.andExpect(status().isCreated());
@@ -75,6 +77,7 @@ public class UserControllerTest {
                 post("/roles/save")
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(JSON_HAL_VALUE)
+                        .with(csrf())
                         .content(request));
 
         result.andExpect(status().isCreated());
@@ -144,6 +147,7 @@ public class UserControllerTest {
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON)
                         .param("email", email)
+                        .with(csrf())
                         .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_manager"))));
 
         result.andExpect(status().isNoContent());
@@ -165,6 +169,7 @@ public class UserControllerTest {
                 put("/roles/add")
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(JSON_HAL_VALUE)
+                        .with(csrf())
                         .content(request));
 
         result.andExpect(status().isOk());

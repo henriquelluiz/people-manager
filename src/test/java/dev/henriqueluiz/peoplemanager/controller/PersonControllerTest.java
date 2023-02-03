@@ -20,6 +20,7 @@ import java.time.LocalDate;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
@@ -53,6 +54,7 @@ public class PersonControllerTest {
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(JSON_HAL_VALUE)
                         .content(request)
+                        .with(csrf())
                         .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_write"))));
 
         result.andExpect(status().isCreated());
@@ -80,6 +82,7 @@ public class PersonControllerTest {
                         .accept(APPLICATION_JSON)
                         .param("personId", String.valueOf(1))
                         .content(request)
+                        .with(csrf())
                         .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_write"))));
         result.andExpect(status().isNoContent());
     }
@@ -99,6 +102,7 @@ public class PersonControllerTest {
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON)
                         .param("personId", String.valueOf(1))
+                        .with(csrf())
                         .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_write"))));
         result.andExpect(status().isNoContent());
     }

@@ -25,6 +25,7 @@ import java.util.Collections;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -63,6 +64,7 @@ public class AuthenticationControllerTest {
                 post("/token")
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON)
+                        .with(csrf())
                         .content(request));
         result.andExpect(status().isOk());
         result.andExpect(jsonPath("$.type").value("bearer"));
@@ -97,6 +99,7 @@ public class AuthenticationControllerTest {
                 post("/refresh")
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON)
+                        .with(csrf())
                         .content(request));
         result.andExpect(status().isOk());
         result.andExpect(jsonPath("$.type").value("bearer"));

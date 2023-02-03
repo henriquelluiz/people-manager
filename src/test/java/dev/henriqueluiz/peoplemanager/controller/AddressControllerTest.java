@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
@@ -61,6 +62,7 @@ public class AddressControllerTest {
                         .accept(JSON_HAL_VALUE)
                         .param("personId", String.valueOf(1))
                         .content(request)
+                        .with(csrf())
                         .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_write"))));
 
         result.andExpect(status().isCreated());
@@ -132,6 +134,7 @@ public class AddressControllerTest {
                         .accept(APPLICATION_JSON)
                         .param("personId", String.valueOf(1))
                         .param("addressId", String.valueOf(1))
+                        .with(csrf())
                         .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_write"))));
         result.andExpect(status().isNoContent());
     }
