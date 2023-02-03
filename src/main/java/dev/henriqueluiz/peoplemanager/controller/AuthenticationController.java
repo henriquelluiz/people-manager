@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +34,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(tokenService.getTokens(authentication));
     }
 
-    @GetMapping(value = { "/refresh" }, produces = { "application/json" })
+    @PostMapping(value = { "/refresh" }, produces = { "application/json" })
     public ResponseEntity<TokenResponse> refreshTokens(@RequestBody @Valid RefreshTokenRequest req) {
         return ResponseEntity.ok(tokenService.refreshTokens(req.token()));
     }
